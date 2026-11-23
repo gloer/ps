@@ -1,7 +1,19 @@
+"use client";
+
+import { useState } from "react";
 import "./page.css";
 import { categories } from "@/data/data";
 
+export type Info = {
+  kategorinavn: string;
+  elementnavn: string;
+  elementsymbol: string;
+};
+
 export default function Home() {
+
+  const [info, setInfo] = useState<Info | null>(null);
+
   return (
     <section className="ps">
       {
@@ -10,6 +22,26 @@ export default function Home() {
             {
               category.elements.map(element => (
                 <span
+                  tabIndex={element.atomic_number}
+                  onFocus={
+                    () => {
+
+                      setInfo({
+                        kategorinavn: category.name,
+                        elementnavn: element.name,
+                        elementsymbol: element.symbol,
+                      });
+                    }
+                  }
+                  onMouseEnter={
+                    () => {
+                      setInfo({
+                        kategorinavn: category.name,
+                        elementnavn: element.name,
+                        elementsymbol: element.symbol,
+                      });
+                    }
+                  }
                   className="element"
                   key={element.symbol}
                   style={{
@@ -26,11 +58,16 @@ export default function Home() {
         ))
       }
 
-      <article className="sub info">
-        <div>
-          <h1>Helium sdsds</h1>
-        </div>
-      </article>
+      {
+        info !== null &&
+        <article className="sub info">
+          <div>
+            <h1>{info.elementnavn}</h1>
+            <p>Kjemisk sybol: {info.elementsymbol}</p>
+            <p>Kategori: {info.kategorinavn}</p>
+          </div>
+        </article>
+      }
 
     </section>
   );
